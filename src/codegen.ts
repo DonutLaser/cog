@@ -144,7 +144,13 @@ function translateMatchCase(c: MatchCase, context: ParsedFile, indentLevel: numb
     const indent = ' '.repeat(indentLevel * 4);
     const nextIndent = ' '.repeat((indentLevel + 1) * 4);
 
-    result.push(`${indent}case ${translateExpression(c.pattern, context)}: {`);
+    if (c.patterns.length > 1) {
+        for (let i = 0; i < c.patterns.length - 1; ++i) {
+            result.push(`${indent}case ${translateExpression(c.patterns[i], context)}:`);
+        }
+    }
+
+    result.push(`${indent}case ${translateExpression(c.patterns[c.patterns.length - 1], context)}: {`);
     result.push(...translateBlock(c.block, context, indentLevel + 1));
     result.push(`${nextIndent}break;`);
     result.push(`${indent}}`);

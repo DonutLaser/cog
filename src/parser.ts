@@ -48,7 +48,7 @@ export interface MatchStatement {
 }
 
 export interface MatchCase {
-    pattern: Expression;
+    patterns: Expression[];
     block: Block;
 }
 
@@ -301,8 +301,9 @@ function parseMatchStatement(tokenList: TokenList): MatchStatement {
         token = tokenList.peek();
     }
 
-    token = tokenList.pop();
+    token = tokenList.peek();
     if (token.type === TokenType.Else) {
+        tokenList.pop();
         result.else = parseBlock(tokenList);
     }
 
@@ -315,9 +316,18 @@ function parseMatchStatement(tokenList: TokenList): MatchStatement {
 }
 
 function parseMatchCase(tokenList: TokenList): MatchCase {
-    const result: MatchCase = { pattern: { type: 'string', data: null }, block: { statements: [], variables: [] } };
+    const result: MatchCase = { patterns: [], block: { statements: [], variables: [] } };
 
-    result.pattern = parseExpression(tokenList);
+    let token = tokenList.peek();
+    do {
+        result.patterns.push(parseExpression(tokenList));
+
+        token = tokenList.peek();
+        if (token.type === TokenType.Comma) {
+            token = tokenList.pop();
+        }
+    } while (token.type === TokenType.Comma);
+
     result.block = parseBlock(tokenList);
 
     return result;
@@ -336,7 +346,7 @@ function parseForStatement(tokenList: TokenList): ForStatement {
         if (token.type === TokenType.Identifier) {
             const identifier = token.value as string;
 
-            if (tokenList.peek(2).type === TokenType.In) {
+            if (tokenList.peek(1).type === TokenType.In) {
                 result.item = identifier;
                 token = tokenList.pop();
             }
@@ -519,7 +529,7 @@ function parseOperand(tokenList: TokenList): Expression {
         result.type = 'bool';
         result.data = 'false';
     } else if (token.type === TokenType.Identifier) {
-        if (tokenList.peek(2).type === TokenType.LParen) {
+        if (tokenList.peek(1).type === TokenType.LParen) {
             result.type = 'function-call';
             result.data = parseFunctionCall(tokenList);
         } else {

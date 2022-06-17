@@ -1,0 +1,12 @@
+func main(): void {
+    let age: i32 = 5
+
+    match age {
+        0, 2, 4, 6, 8 {
+            print('even')
+        }
+        1, 3, 5, 7, 9 {
+            print('odd')
+        }
+    }
+}
