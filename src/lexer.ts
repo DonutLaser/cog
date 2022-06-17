@@ -78,6 +78,13 @@ export class TokenList {
             console.log(tokenToString(token.type), token.value);
         }
     }
+
+    debug(): void {
+        for (let i = this.cursor; i < this.tokens.length; ++i) {
+            console.log(tokenToString(this.tokens[i].type), this.tokens[i].value);
+
+        }
+    }
 }
 
 export function tokenToString(tokenType: TokenType): string {
