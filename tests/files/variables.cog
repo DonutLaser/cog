@@ -1,0 +1,7 @@
+func main(): void {
+    let x: i32 = 6
+    let y: i32 = 9
+
+    print(x)
+    print(y)
+}

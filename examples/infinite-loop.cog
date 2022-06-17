@@ -1,0 +1,6 @@
+func main(): void {
+    # Infinite loop
+    for {
+        break
+    }
+}

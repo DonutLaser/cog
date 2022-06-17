@@ -1,0 +1,5 @@
+func main(): void {
+    # this is a comment above
+    print('comment above')
+    print('comment inline') # this is a comment inline
+}

@@ -1,0 +1,6 @@
+func main(): void {
+    # Looping from 0 (inclusive) to 10 (non-inclusive)
+    for 0..10 {
+        print(it) # `it` is a default name for the item from the range
+    }
+}

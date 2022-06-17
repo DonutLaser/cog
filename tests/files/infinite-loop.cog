@@ -1,0 +1,9 @@
+func main(): void {
+    # Infinite loop
+    for {
+        print('started')
+        break
+    }
+
+    print('stopped')
+}

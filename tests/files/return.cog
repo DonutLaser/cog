@@ -1,0 +1,7 @@
+func main(): void {
+    print(age())
+}
+
+func age(): i32 {
+    return 28
+}

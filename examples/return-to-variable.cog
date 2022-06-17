@@ -1,0 +1,8 @@
+func main(): void {
+    let x: i32 = age()
+    print(x)
+}
+
+func age(): i32 {
+    return 69
+}

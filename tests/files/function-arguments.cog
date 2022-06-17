@@ -1,0 +1,8 @@
+func main(): void {
+    log('Hello, darkness, my old friend', 'I come to talk to you again')
+}
+
+func log(text: string, subtext: string): void {
+    print(text)
+    print(subtext)
+}

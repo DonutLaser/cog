@@ -1,0 +1,7 @@
+func main(): void {
+    let arr: i32[] = [1, 2, 3, 4]
+
+    for arr {
+        print(it)
+    }
+}

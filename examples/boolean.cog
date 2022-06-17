@@ -1,0 +1,7 @@
+func main(): void {
+    let is_true: bool = true
+    let is_false: bool = false
+
+    print(is_true)
+    print(is_false)
+}

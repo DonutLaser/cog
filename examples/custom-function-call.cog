@@ -1,0 +1,7 @@
+func main(): void {
+    log()
+}
+
+func log(): void {
+    print('hello, world!')
+}

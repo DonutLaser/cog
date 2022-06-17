@@ -1,0 +1,15 @@
+func main(): void {
+    # break and continue keywords
+    for 0..100 {
+        if it < 2 {
+            print(it)
+        } elif it > 2 and it < 4 {
+            continue
+        }
+
+        if it > 6 {
+            print('ready to break')
+            break
+        }
+    }
+}

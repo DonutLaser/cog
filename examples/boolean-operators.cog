@@ -1,0 +1,10 @@
+func main(): void {
+    let a: i32 = 1
+    let b: i32 = 2
+
+    let c: bool = a == b
+    let d: bool = a != b
+
+    print(c and d)
+    print(c or d)
+}
