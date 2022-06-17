@@ -4,7 +4,7 @@ func main(): void {
         if it < 2 {
             print(it)
         } elif it > 2 and it < 4 {
-            continue
+            skip
         }
 
         if it > 6 {

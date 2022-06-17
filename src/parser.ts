@@ -68,7 +68,7 @@ export interface VariableDecl {
     value: Expression;
 }
 
-export type StatementType = 'expression' | 'return' | 'variable-decl' | 'if-statement' | 'for-statement' | 'break' | 'continue' | 'defer';
+export type StatementType = 'expression' | 'return' | 'variable-decl' | 'if-statement' | 'for-statement' | 'break' | 'skip' | 'defer';
 export interface Statement {
     type: StatementType;
     data: any;
@@ -219,9 +219,9 @@ function parseStatement(tokenList: TokenList): Statement {
             case TokenType.Break:
                 tokenList.pop();
                 return { type: 'break', data: null };
-            case TokenType.Continue:
+            case TokenType.Skip:
                 tokenList.pop();
-                return { type: 'continue', data: null };
+                return { type: 'skip', data: null };
             case TokenType.Defer:
                 tokenList.pop();
                 return { type: 'defer', data: parseExpression(tokenList) };

@@ -37,7 +37,7 @@ export enum TokenType {
     It,
     In,
     Break,
-    Continue,
+    Skip,
     Defer,
     EOF,
 }
@@ -159,8 +159,8 @@ export function tokenToString(tokenType: TokenType): string {
             return 'in';
         case TokenType.Break:
             return 'break;';
-        case TokenType.Continue:
-            return 'continue';
+        case TokenType.Skip:
+            return 'skip';
         case TokenType.Defer:
             return 'defer';
         default:
@@ -242,8 +242,8 @@ export function lex(src: string): TokenList {
                 result.push({ type: TokenType.In });
             } else if (value === 'break') {
                 result.push({ type: TokenType.Break });
-            } else if (value === 'continue') {
-                result.push({ type: TokenType.Continue });
+            } else if (value === 'skip') {
+                result.push({ type: TokenType.Skip });
             } else if (value === 'defer') {
                 result.push({ type: TokenType.Defer });
             } else {

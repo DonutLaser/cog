@@ -56,7 +56,7 @@ function translateBlock(block: Block, context: ParsedFile, indentLevel: number):
             case 'break':
                 result.push(`${indent}break;`);
                 break;
-            case 'continue':
+            case 'skip':
                 result.push(`${indent}continue`);
                 break;
             case 'defer': {
