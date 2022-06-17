@@ -41,6 +41,17 @@ export interface IfStatement {
     else?: { block: Block };
 }
 
+export interface MatchStatement {
+    pattern: Expression;
+    cases: MatchCase[];
+    else?: Block;
+}
+
+export interface MatchCase {
+    pattern: Expression;
+    block: Block;
+}
+
 export interface ForStatement {
     item?: string;
     expression?: Expression;
@@ -68,7 +79,7 @@ export interface VariableDecl {
     value: Expression;
 }
 
-export type StatementType = 'expression' | 'return' | 'variable-decl' | 'if-statement' | 'for-statement' | 'break' | 'skip' | 'defer';
+export type StatementType = 'expression' | 'return' | 'variable-decl' | 'if-statement' | 'match-statement' | 'for-statement' | 'break' | 'skip' | 'defer';
 export interface Statement {
     type: StatementType;
     data: any;
@@ -214,6 +225,8 @@ function parseStatement(tokenList: TokenList): Statement {
                 return { type: 'variable-decl', data: parseVariableDecl(tokenList) };
             case TokenType.If:
                 return { type: 'if-statement', data: parseIfStatement(tokenList) };
+            case TokenType.Match:
+                return { type: 'match-statement', data: parseMatchStatement(tokenList) };
             case TokenType.For:
                 return { type: 'for-statement', data: parseForStatement(tokenList) };
             case TokenType.Break:
@@ -264,6 +277,48 @@ function parseIfStatement(tokenList: TokenList): IfStatement {
         tokenList.pop();
         result.else = { block: parseBlock(tokenList) };
     }
+
+    return result;
+}
+
+function parseMatchStatement(tokenList: TokenList): MatchStatement {
+    const result: MatchStatement = { pattern: { type: 'string', data: null }, cases: [] };
+
+    let token = tokenList.pop();
+    if (token.type !== TokenType.Match) {
+        throw new Error(`Expected 'match', got '${tokenToString(token.type)}'`);
+    }
+
+    result.pattern = parseExpression(tokenList);
+
+    token = tokenList.pop();
+    if (token.type !== TokenType.LBrace) {
+        throw new Error(`Expected '{', got '${tokenToString(token.type)}'`);
+    }
+
+    while (token.type !== TokenType.EOF && token.type !== TokenType.RBrace && token.type !== TokenType.Else) {
+        result.cases.push(parseMatchCase(tokenList));
+        token = tokenList.peek();
+    }
+
+    token = tokenList.pop();
+    if (token.type === TokenType.Else) {
+        result.else = parseBlock(tokenList);
+    }
+
+    token = tokenList.pop();
+    if (token.type !== TokenType.RBrace) {
+        throw new Error(`Expected '}', got '${tokenToString(token.type)}'`);
+    }
+
+    return result;
+}
+
+function parseMatchCase(tokenList: TokenList): MatchCase {
+    const result: MatchCase = { pattern: { type: 'string', data: null }, block: { statements: [], variables: [] } };
+
+    result.pattern = parseExpression(tokenList);
+    result.block = parseBlock(tokenList);
 
     return result;
 }
@@ -380,8 +435,9 @@ function parseVariableDecl(tokenList: TokenList): VariableDecl {
     result.name = token.value as string;
     result.type = parseType(tokenList);
 
-    token = tokenList.pop();
+    token = tokenList.peek();
     if (token.type === TokenType.LBracket) {
+        token = tokenList.pop();
         token = tokenList.pop();
         if (token.type === TokenType.RBracket) {
             result.isArray = true;

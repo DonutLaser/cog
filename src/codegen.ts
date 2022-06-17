@@ -1,4 +1,4 @@
-import { BinaryOp, Block, Expression, ForStatement, Func, FunctionCall, IfStatement, Operator, Parameter, ParsedFile, VariableDecl } from './parser';
+import { BinaryOp, Block, Expression, ForStatement, Func, FunctionCall, IfStatement, MatchCase, MatchStatement, Operator, Parameter, ParsedFile, VariableDecl } from './parser';
 
 export function translate(parsedFile: ParsedFile): string {
     const result: string[] = [];
@@ -49,6 +49,9 @@ function translateBlock(block: Block, context: ParsedFile, indentLevel: number):
                 break;
             case 'if-statement':
                 result.push(translateIfStatement(statement.data, context, indentLevel));
+                break;
+            case 'match-statement':
+                result.push(translateMatchStatement(statement.data, context, indentLevel));
                 break;
             case 'for-statement':
                 result.push(...translateForStatement(statement.data, context, indentLevel));
@@ -110,6 +113,43 @@ function translateIfStatement(st: IfStatement, context: ParsedFile, indentLevel:
 
     result.push(`${indent}}`);
     return result.join('\n');
+}
+
+function translateMatchStatement(st: MatchStatement, context: ParsedFile, indentLevel: number): string {
+    const result: string[] = [];
+
+    const indent = ' '.repeat(indentLevel * 4);
+    const nextIndent = ' '.repeat((indentLevel + 1) * 4);
+    const nextnextIndent = ' '.repeat((indentLevel + 2) * 4);
+
+    const pattern = translateExpression(st.pattern, context);
+    result.push(`${indent}switch (${pattern}) {`);
+    for (const c of st.cases) {
+        result.push(...translateMatchCase(c, context, indentLevel + 1));
+    }
+    if (st.else) {
+        result.push(`${nextIndent}default: {`);
+        result.push(...translateBlock(st.else, context, indentLevel + 2));
+        result.push(`${nextnextIndent}break;`);
+        result.push(`${nextIndent}}`);
+    }
+    result.push(`${indent}}`);
+
+    return result.join('\n');
+}
+
+function translateMatchCase(c: MatchCase, context: ParsedFile, indentLevel: number): string[] {
+    const result: string[] = [];
+
+    const indent = ' '.repeat(indentLevel * 4);
+    const nextIndent = ' '.repeat((indentLevel + 1) * 4);
+
+    result.push(`${indent}case ${translateExpression(c.pattern, context)}: {`);
+    result.push(...translateBlock(c.block, context, indentLevel + 1));
+    result.push(`${nextIndent}break;`);
+    result.push(`${indent}}`);
+
+    return result;
 }
 
 function translateForStatement(st: ForStatement, context: ParsedFile, indentLevel: number): string[] {

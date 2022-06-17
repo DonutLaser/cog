@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "build": "npx tsc",
-        "start": "node ./build/index.js ./examples/continue.cog && node main.js",
+        "start": "node ./build/index.js ./examples/match.cog && node main.js",
         "test": "jest"
     },
     "keywords": [],

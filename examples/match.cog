@@ -1,0 +1,15 @@
+func main(): void {
+    let name: string = 'vidmantas'
+
+    match name {
+        'vidmantas' {
+            print('luneckas')
+        }
+        'karolina' {
+            print('luneckiene')
+        }
+        else {
+            print('bevardis')
+        }
+    }
+}

@@ -30,6 +30,7 @@ export enum TokenType {
     False,
     And,
     Or,
+    Match,
     If,
     ElseIf,
     Else,
@@ -145,6 +146,8 @@ export function tokenToString(tokenType: TokenType): string {
             return 'or';
         case TokenType.EOF:
             return 'eof';
+        case TokenType.Match:
+            return 'match';
         case TokenType.If:
             return 'if';
         case TokenType.ElseIf:
@@ -228,6 +231,8 @@ export function lex(src: string): TokenList {
                 result.push({ type: TokenType.And });
             } else if (value === 'or') {
                 result.push({ type: TokenType.Or });
+            } else if (value === 'match') {
+                result.push({ type: TokenType.Match });
             } else if (value === 'if') {
                 result.push({ type: TokenType.If });
             } else if (value === 'elif') {
