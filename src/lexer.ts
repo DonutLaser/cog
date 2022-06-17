@@ -54,7 +54,7 @@ export class TokenList {
 
     constructor(tokens: Token[]) {
         this.tokens = tokens;
-        this.cursor = -1;
+        this.cursor = 0;
     }
 
     pop(): Token {
@@ -62,10 +62,10 @@ export class TokenList {
             this.cursor = this.tokens.length - 1;
         }
 
-        return this.tokens[++this.cursor];
+        return this.tokens[this.cursor++];
     }
 
-    peek(pos = 1): Token {
+    peek(pos = 0): Token {
         if (this.cursor >= this.tokens.length) {
             this.cursor = this.tokens.length - 2;
         }
